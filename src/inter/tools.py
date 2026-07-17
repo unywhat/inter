@@ -1,8 +1,32 @@
-from math import sin, cos, radians
-def qmul(axis: tuple[float, float, float], vector: tuple[float, float, float], angle: float) -> tuple[float, float, float, float]:
+def get_config():
+    """Load and return config data from inter.toml.
+
+    Returns:
+        dict: config data from inter.toml
+    """
+
+    import tomllib
+
+    with open('inter.toml', 'rb') as cfg:
+        data = tomllib.load(cfg)
+
+    return data
+
+def qmul(axis: tuple[float, float, float], vertex: tuple[float, float, float], angle: float) -> tuple[float, float, float, float]:
+    """Rotate a 3D vector by an axis-angle quaternion.
+
+    Parameters:
+        3-tuple: the rotation axis (x, y, z).
+        3-tuple: the vertex to rotate.
+        float: rotation angle in degrees.
+
+    Returns:
+        4-tuple: the rotated quaternion (w, x, y, z).
+    """
+    from math import sin, cos, radians
     angle = radians(angle)
     q = (cos(angle/2), axis[0]*sin(angle/2), axis[1]*sin(angle/2), axis[2]*sin(angle/2))
-    v = (0, *vector)
+    v = (0, *vertex)
 
     rotated_v = (
         q[0]*v[0] - q[1]*v[1] - q[2]*v[2] - q[3]*v[3],
