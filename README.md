@@ -24,8 +24,9 @@ instructions:
 <summary>if you downloaded the release</summary>
 once you've downloaded the release executable, navigate to your downloads folder and double click the executable.
 if you would prefer to run it via the terminal, heres how you would do that in linux:
+
 ```bash
-cd ~/Downloads # or your downloads folder
+cd /path/to/your/downloads/ # wherever your downloads folder is
 chmod +x ./interX.X.X # version will be different
 ./interX.X.X # this will launch inter
 ```
@@ -63,7 +64,7 @@ source ./.venv/bin/activate
 
 6. install dependencies & run
 ```bash
-pip install -e .
+pip install -e . # install the inter command (NOT global)
 inter # this will open inter
 ```
 </details>
