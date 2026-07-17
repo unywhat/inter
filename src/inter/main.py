@@ -1,12 +1,12 @@
 import pygame
 from inter.tools import *
 
+config = get_config()
+
 pygame.init()
-WIDTH, HEIGHT = 800, 800
+WIDTH, HEIGHT = config["general"]["window_width"], config["general"]["window_height"]
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
-
-config = get_config()
 
 def main():
     running = True
