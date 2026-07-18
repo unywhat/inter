@@ -73,6 +73,19 @@ def qconj(q: tuple[float, float, float, float]) -> tuple[float, float, float, fl
     w, x, y, z = q
     return (w, -x, -y, -z)
 
+def qnorm(q: tuple[float, float, float, float]) -> tuple[float, float, float, float]:
+    """Normalize a quaternion to unit length, preventing drift from accumulated rotations.
+
+    Parameters:
+        4-tuple: the quaternion (w, x, y, z).
+
+    Returns:
+        4-tuple: the normalized quaternion (w, x, y, z).
+    """
+    w, x, y, z = q
+    mag = (w*w + x*x + y*y + z*z) ** 0.5
+    return (w/mag, x/mag, y/mag, z/mag)
+
 def qver(axis: tuple[float, float, float], vertex: tuple[float, float, float], angle: float) -> tuple[float, float, float, float]:
     """Rotate a 3D vector by an axis-angle quaternion.
 

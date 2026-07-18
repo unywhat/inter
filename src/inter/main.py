@@ -10,6 +10,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
 focal_length = config["general"]["focal_length"]
+sensitivity = config["general"]["sensitivity"]
 
 camera_pos = [0.0, 0.0, -5.0]
 camera_rot = (1.0, 0.0, 0.0, 0.0)
@@ -17,6 +18,10 @@ objects: list[Object3D] = []
 
 objects.append(Object3D((0, 0, 0), (0, 0, 0), 90))
 objects[0].load_asset("monkey")
+
+pygame.mouse.set_visible(False)
+pygame.event.set_grab(True)
+pygame.mouse.get_rel()
 
 def main():
     global camera_rot
@@ -26,6 +31,8 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
         screen.fill((0, 0, 0))
+
+        mouse_movement = pygame.mouse.get_rel()
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:
@@ -48,20 +55,11 @@ def main():
             camera_pos[0] -= forward[0] * 0.05
             camera_pos[1] -= forward[1] * 0.05
             camera_pos[2] -= forward[2] * 0.05
-        if keys[pygame.K_RIGHT]:
-            delta = atoquat((0, 1, 0), 1)
-            camera_rot = qmul(camera_rot, delta)
-        if keys[pygame.K_LEFT]:
-            delta = atoquat((0, 1, 0), -1)
-            camera_rot = qmul(camera_rot, delta)
-        if keys[pygame.K_UP]:
-            delta = atoquat((1, 0, 0), 1)
-            camera_rot = qmul(camera_rot, delta)
-        if keys[pygame.K_DOWN]:
-            delta = atoquat((1, 0, 0), -1)
-            camera_rot = qmul(camera_rot, delta)
 
-        print(camera_rot)
+        delta = atoquat((0, 1, 0), mouse_movement[0]*sensitivity)
+        camera_rot = qnorm(qmul(camera_rot, delta))
+        delta = atoquat((1, 0, 0), mouse_movement[1]*sensitivity)
+        camera_rot = qnorm(qmul(camera_rot, delta))
                     
 
         for obj in objects:
