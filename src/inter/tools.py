@@ -33,6 +33,42 @@ def qmul(q1: tuple[float, float, float, float], q2: tuple[float, float, float, f
         w1*z2 + x1*y2 - y1*x2 + z1*w2,
     )
 
+def atoquat(axis: tuple[float, float, float], angle_deg: float) -> tuple[float, float, float, float]:
+    angle = radians(angle_deg)
+    s = sin(angle / 2)
+    return (cos(angle / 2), axis[0]*s, axis[1]*s, axis[2]*s)
+
+def qrotate(q: tuple[float, float, float, float], vertex: tuple[float, float, float]) -> tuple[float, float, float]:
+    """Rotate a 3D vector by an already made quaternion.
+
+    Parameters:
+        4-tuple: the rotation quaternion (w, x, y, z).
+        3-tuple: the vertex to rotate.
+
+    Returns:
+        3-tuple: the rotated vertex (x, y, z).
+    """
+
+    w, x, y, z = q
+    q_conj = (w, -x, -y, -z)
+    v = (0.0, *vertex)
+
+    qv = (
+        q[0]*v[0] - q[1]*v[1] - q[2]*v[2] - q[3]*v[3],
+        q[0]*v[1] + q[1]*v[0] + q[2]*v[3] - q[3]*v[2],
+        q[0]*v[2] - q[1]*v[3] + q[2]*v[0] + q[3]*v[1],
+        q[0]*v[3] + q[1]*v[2] - q[2]*v[1] + q[3]*v[0],
+    )
+
+    result = (
+        qv[0]*q_conj[0] - qv[1]*q_conj[1] - qv[2]*q_conj[2] - qv[3]*q_conj[3],
+        qv[0]*q_conj[1] + qv[1]*q_conj[0] + qv[2]*q_conj[3] - qv[3]*q_conj[2],
+        qv[0]*q_conj[2] - qv[1]*q_conj[3] + qv[2]*q_conj[0] + qv[3]*q_conj[1],
+        qv[0]*q_conj[3] + qv[1]*q_conj[2] - qv[2]*q_conj[1] + qv[3]*q_conj[0],
+    )
+
+    return result[1:]
+
 def qver(axis: tuple[float, float, float], vertex: tuple[float, float, float], angle: float) -> tuple[float, float, float, float]:
     """Rotate a 3D vector by an axis-angle quaternion.
 
