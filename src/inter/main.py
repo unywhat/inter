@@ -1,5 +1,6 @@
 import pygame
 from inter.tools import *
+from inter.classes import Object3D
 
 config = get_config()
 
@@ -10,18 +11,11 @@ clock = pygame.time.Clock()
 
 focal_length = config["general"]["focal_length"]
 
-camera_pos = (0, 0, -2)
+camera_pos = (0, 0, -5)
+objects: list[Object3D] = []
 
-cube_points = [
-    (-1, -1, 3),
-    ( 1, -1, 3),
-    ( 1,  1, 3),
-    (-1,  1, 3),
-    (-1, -1, 5),
-    ( 1, -1, 5),
-    ( 1,  1, 5),
-    (-1,  1, 5),
-]
+objects.append(Object3D((0, 0, 0), (0, 0, 0), 90))
+objects[0].load_asset("monkey")
 
 def main():
     running = True
@@ -31,21 +25,25 @@ def main():
                 running = False
         screen.fill((0, 0, 0))
 
-        for point in cube_points:
-            x, y, z = point
-            xt, yt, zt = camera_pos
-            x -= xt
-            y -= yt
-            z -= zt
-            if z <= 0:
-                continue
+        for obj in objects:
+            for vertex in obj.vertices:
+                x, y, z = vertex
+                xt, yt, zt = camera_pos
+                x -= xt
+                y -= yt
+                z -= zt
+                x -= obj.pos[0]
+                y -= obj.pos[1]
+                z -= obj.pos[2]
+                if z <= 0:
+                    continue
 
-            pygame.draw.aacircle(
-                screen,
-                (255, 255, 255),
-                project((x, y, z), focal_length, WIDTH, HEIGHT),
-                3
-            )
+                pygame.draw.aacircle(
+                    screen,
+                    (255, 255, 255),
+                    project((x, y, z), focal_length, WIDTH, HEIGHT),
+                    3
+                )
 
         pygame.display.flip()
         clock.tick(60)

@@ -1,3 +1,5 @@
+from math import sin, cos, radians
+
 def get_config():
     """Load and return config data from inter.toml.
 
@@ -23,7 +25,7 @@ def qmul(axis: tuple[float, float, float], vertex: tuple[float, float, float], a
     Returns:
         4-tuple: the rotated quaternion (w, x, y, z).
     """
-    from math import sin, cos, radians
+
     angle = radians(angle)
     q = (cos(angle/2), axis[0]*sin(angle/2), axis[1]*sin(angle/2), axis[2]*sin(angle/2))
     v = (0, *vertex)
@@ -65,3 +67,53 @@ def project(pos: tuple[float, float, float], f: float, w: int, h: int):
     screen_y = h / 2 - f * (y / z)
 
     return (screen_x, screen_y)
+
+def load_asset(name: str) -> list[tuple[float, float, float]]:
+    """Loads and returns one of the saved assets.
+    Asset folder: models/ (project root)
+    
+    Parameters:
+        str: the name of the asset to return.
+    
+    Returns:
+        list: list of 3-tuples containing vertex data.
+    """
+
+    extracted_points: list[tuple[float, float, float]] = []
+
+    with open(f'models/{name}.inter', 'r') as obj:
+        for line in obj:
+            x, y, z = line.split()
+            extracted_points.append((float(x), float(y), float(z)))
+
+    return extracted_points
+
+def convert_obj_to_inter(name: str):
+    """Converts OBJ files to .inter.
+    Saves converted OBJ files to models/
+    Limited to just vertices currently.
+
+    Parameters:
+        str: name of the file in the project root directory.
+
+    Returns:
+        list: list of 3-tuples with coordinates.
+    """
+
+    inter_coords: list[tuple[float, float, float]] = []
+
+    with open(f'{name}.obj', 'r') as obj:
+        for line in obj:
+            if line[0] == "v":
+                split_line = line.split()
+                coordinates = split_line[1:]
+                x, y, z = coordinates
+
+                inter_coords.append((float(x), float(y), float(z)))
+
+    with open(f'models/{name}.inter', 'a') as inter_file:
+        for coordinate in inter_coords:
+            x, y, z = coordinate
+            inter_file.write(f'{x} {y} {z}\n')
+
+    return inter_coords
