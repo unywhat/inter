@@ -12,7 +12,7 @@ clock = pygame.time.Clock()
 focal_length = config["general"]["focal_length"]
 
 camera_pos = [0.0, 0.0, -5.0]
-camera_rot = [1.0, 0.0, 0.0, 0.0]
+camera_rot = (1.0, 0.0, 0.0, 0.0)
 objects: list[Object3D] = []
 
 objects.append(Object3D((0, 0, 0), (0, 0, 0), 90))
