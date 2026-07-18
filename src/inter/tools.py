@@ -45,3 +45,9 @@ def qmul(axis: tuple[float, float, float], vertex: tuple[float, float, float], a
     )
 
     return rotated_v
+
+def project(pos: tuple[float, float, float], f: float, w: int, h: int):
+    x, y, z = pos
+    screen_x = w / 2 + f * (x / z)
+    screen_y = h / 2 - f * (y / z)
+    return (screen_x, screen_y)

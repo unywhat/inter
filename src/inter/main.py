@@ -10,15 +10,7 @@ clock = pygame.time.Clock()
 
 focal_length = config["general"]["focal_length"]
 
-def project(pos: tuple[float, float, float]):
-    x, y, z = pos
-    screen_x = WIDTH / 2 + focal_length * (x / z)
-    screen_y = HEIGHT / 2 - focal_length * (y / z)
-    return (screen_x, screen_y)
-
-
 camera_pos = (0, 0, -2)
-
 
 cube_points = [
     (-1, -1, 3),
@@ -51,7 +43,7 @@ def main():
             pygame.draw.aacircle(
                 screen,
                 (255, 255, 255),
-                project((x, y, z)),
+                project((x, y, z), focal_length, WIDTH, HEIGHT),
                 3
             )
 
