@@ -120,6 +120,26 @@ def qver(axis: tuple[float, float, float], vertex: tuple[float, float, float], a
 
     return rotated_v
 
+def gravity_accel(pos_self: list[float], pos_other: list[float], mass_other: float, G: float=0):
+    dx = pos_other[0] - pos_self[0]
+    dy = pos_other[1] - pos_self[1]
+    dz = pos_other[2] - pos_self[2]
+    
+    r_squared = dx*dx + dy*dy + dz*dz
+    r = r_squared ** 0.5
+    
+    if r == 0:
+        return (0.0, 0.0, 0.0)  # avoid divide-by-zero if objects overlap
+    
+    accel_magnitude = G * mass_other / r_squared
+    
+    # normalize the direction vector, scale by acceleration magnitude
+    return (
+        accel_magnitude * dx / r,
+        accel_magnitude * dy / r,
+        accel_magnitude * dz / r,
+    )
+
 def project(pos: tuple[float, float, float], f: float, w: int, h: int):
     """Project a 3D point into a 2D coordinate.
     

@@ -12,12 +12,17 @@ clock = pygame.time.Clock()
 focal_length = config["general"]["focal_length"]
 sensitivity = config["general"]["sensitivity"]
 
+GRAVITY = config["sim"]["gravity"]
+
 camera_pos = [0.0, 0.0, -5.0]
 camera_rot = (1.0, 0.0, 0.0, 0.0)
 objects: list[Object3D] = []
 
-objects.append(Object3D((0, 0, 0), (0, 0, 0), 90))
+
+# central heavy body — effectively stationary
+objects.append(Object3D((0, 0, 0), (0, 0, 0), 0))
 objects[0].load_asset("sphere")
+objects[0].mass = 1000.0
 
 pygame.mouse.set_visible(False)
 pygame.event.set_grab(True)
@@ -73,6 +78,16 @@ def main():
                     
 
         for obj in objects:
+            for gobj in objects:
+                if gobj != obj:
+                    ax, ay, az = gravity_accel(obj.pos, gobj.pos, gobj.mass, GRAVITY)
+                    obj.vx += ax
+                    obj.vy += ay
+                    obj.vz += az
+
+
+            obj.update()
+
             for edge in obj.edges:
                 p1: list[tuple[float, float, float]] = []
                 p2: list[tuple[float, float, float]] = []

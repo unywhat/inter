@@ -4,7 +4,10 @@ author="unywhat"
 
 [general]
 fps=60
-window_width=1280
-window_height=720
+window_width=1920
+window_height=1080
 focal_length=640
 sensitivity=0.03
+
+[sim]
+gravity=0.01
