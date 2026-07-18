@@ -14,7 +14,26 @@ def get_config():
 
     return data
 
-def qmul(axis: tuple[float, float, float], vertex: tuple[float, float, float], angle: float) -> tuple[float, float, float, float]:
+def qmul(q1: tuple[float, float, float, float], q2: tuple[float, float, float, float]):
+    """Multiply two quaternions together and return the result.
+
+    Parameters:
+        4-tuple: quaternion 1.
+        4-tuple: quaternion 2.
+
+    Returns:
+        4-tuple: multiplied quaternion.
+    """
+    w1, x1, y1, z1 = q1
+    w2, x2, y2, z2 = q2
+    return (
+        w1*w2 - x1*x2 - y1*y2 - z1*z2,
+        w1*x2 + x1*w2 + y1*z2 - z1*y2,
+        w1*y2 - x1*z2 + y1*w2 + z1*x2,
+        w1*z2 + x1*y2 - y1*x2 + z1*w2,
+    )
+
+def qver(axis: tuple[float, float, float], vertex: tuple[float, float, float], angle: float) -> tuple[float, float, float, float]:
     """Rotate a 3D vector by an axis-angle quaternion.
 
     Parameters:

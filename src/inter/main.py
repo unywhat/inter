@@ -1,6 +1,7 @@
 import pygame
 from inter.tools import *
 from inter.classes import Object3D
+from math import degrees
 
 config = get_config()
 
@@ -12,6 +13,7 @@ clock = pygame.time.Clock()
 focal_length = config["general"]["focal_length"]
 
 camera_pos = [0.0, 0.0, -5.0]
+camera_rot = [0.0, 0.0, 1.0, 0.0]
 objects: list[Object3D] = []
 
 objects.append(Object3D((0, 0, 0), (0, 0, 0), 90))
@@ -34,6 +36,10 @@ def main():
             camera_pos[0] -= 0.05
         if keys[pygame.K_d]:
             camera_pos[0] += 0.05
+        if keys[pygame.K_RIGHT]:
+            camera_rot[0] -= 0.05
+        if keys[pygame.K_LEFT]:
+            camera_rot[0] += 0.05
 
         for obj in objects:
             for vertex in obj.vertices:
@@ -45,6 +51,9 @@ def main():
                 x += obj.pos[0]
                 y += obj.pos[1]
                 z += obj.pos[2]
+
+                x, y, z = qver((camera_rot[1], camera_rot[2], camera_rot[3]), (x, y, z), degrees(camera_rot[0]))[1:]
+
                 if z <= 0:
                     continue
 
