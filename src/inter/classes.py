@@ -6,8 +6,7 @@ class Object3D:
         self.pos = pos
         self.axis = rotation_axis
         self.deg = radians(rotation_degrees)
-        self.vertices: list[tuple[float, float, float]] = []
-        self.edges: list[tuple[int, int]] = []
+        self.edges: list[tuple[tuple[float, float, float], tuple[float, float, float]]] = []
 
     def load_asset(self, name: str):
         self.vertices, self.edges = load_asset(name)

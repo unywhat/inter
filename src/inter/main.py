@@ -74,7 +74,8 @@ def main():
 
         for obj in objects:
             for edge in obj.edges:
-                p1, p2 = [], []
+                p1: list[tuple[float, float, float]] = []
+                p2: list[tuple[float, float, float]] = []
                 skip_edge = False
 
                 for point in edge:

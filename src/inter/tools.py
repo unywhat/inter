@@ -140,7 +140,7 @@ def project(pos: tuple[float, float, float], f: float, w: int, h: int):
 
     return (screen_x, screen_y)
 
-def load_asset(name: str) -> list[tuple[float, float, float]]:
+def load_asset(name: str) -> tuple[list[tuple[float, float, float]], list[tuple[tuple[float, float, float], tuple[float, float, float]]]]:
     """Loads and returns one of the saved assets.
     Asset folder: models/ (project root)
     
@@ -176,7 +176,7 @@ def load_asset(name: str) -> list[tuple[float, float, float]]:
         for a, b in extracted_edges
     ]
 
-    return (extracted_points, resolved_edges)
+    return extracted_points, resolved_edges
 
 def convert_obj_to_inter(name: str):
     """Converts OBJ files to .inter.
