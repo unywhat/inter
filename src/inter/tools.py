@@ -47,7 +47,21 @@ def qmul(axis: tuple[float, float, float], vertex: tuple[float, float, float], a
     return rotated_v
 
 def project(pos: tuple[float, float, float], f: float, w: int, h: int):
+    """Project a 3D point into a 2D coordinate.
+    
+    Parameters:
+        3-tuple: orginal position.
+        float: focal length.
+        int: width of screen.
+        int: height of screen.
+
+    Returns:
+        2-tuple: projected coordinates.
+    """
+
     x, y, z = pos
+
     screen_x = w / 2 + f * (x / z)
     screen_y = h / 2 - f * (y / z)
+
     return (screen_x, screen_y)
