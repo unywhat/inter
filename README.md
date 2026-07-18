@@ -10,6 +10,11 @@ i started inter not just because i wanted to add a portfolio project but i also 
 ### ⚠️ status
 inter is in VERY early development, expect a multitude of bugs to occur and a lack of features as development continues.
 
+### features
+- basic 3D vertex projection & rendering
+- WASD camera movement
+- asset loading (.obj or similar)
+
 ### requirements
 - Python 3.11+
 - OS: Linux / Windows (untested on macOS)

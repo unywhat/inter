@@ -11,7 +11,7 @@ clock = pygame.time.Clock()
 
 focal_length = config["general"]["focal_length"]
 
-camera_pos = (0, 0, -5)
+camera_pos = [0.0, 0.0, -5.0]
 objects: list[Object3D] = []
 
 objects.append(Object3D((0, 0, 0), (0, 0, 0), 90))
@@ -25,6 +25,16 @@ def main():
                 running = False
         screen.fill((0, 0, 0))
 
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_w]:
+            camera_pos[2] += 0.05
+        if keys[pygame.K_s]:
+            camera_pos[2] -= 0.05
+        if keys[pygame.K_a]:
+            camera_pos[0] -= 0.05
+        if keys[pygame.K_d]:
+            camera_pos[0] += 0.05
+
         for obj in objects:
             for vertex in obj.vertices:
                 x, y, z = vertex
@@ -32,9 +42,9 @@ def main():
                 x -= xt
                 y -= yt
                 z -= zt
-                x -= obj.pos[0]
-                y -= obj.pos[1]
-                z -= obj.pos[2]
+                x += obj.pos[0]
+                y += obj.pos[1]
+                z += obj.pos[2]
                 if z <= 0:
                     continue
 
