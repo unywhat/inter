@@ -29,18 +29,36 @@ def main():
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:
-            camera_pos[2] += 0.05
+            forward = qrotate(camera_rot, (0.0, 0.0, 1.0))
+            camera_pos[0] += forward[0] * 0.05
+            camera_pos[1] += forward[1] * 0.05
+            camera_pos[2] += forward[2] * 0.05
         if keys[pygame.K_s]:
-            camera_pos[2] -= 0.05
-        if keys[pygame.K_a]:
-            camera_pos[0] -= 0.05
+            forward = qrotate(camera_rot, (0.0, 0.0, 1.0))
+            camera_pos[0] -= forward[0] * 0.05
+            camera_pos[1] -= forward[1] * 0.05
+            camera_pos[2] -= forward[2] * 0.05
         if keys[pygame.K_d]:
-            camera_pos[0] += 0.05
+            forward = qrotate(camera_rot, (1.0, 0.0, 0.0))
+            camera_pos[0] += forward[0] * 0.05
+            camera_pos[1] += forward[1] * 0.05
+            camera_pos[2] += forward[2] * 0.05
+        if keys[pygame.K_a]:
+            forward = qrotate(camera_rot, (1.0, 0.0, 0.0))
+            camera_pos[0] -= forward[0] * 0.05
+            camera_pos[1] -= forward[1] * 0.05
+            camera_pos[2] -= forward[2] * 0.05
         if keys[pygame.K_RIGHT]:
-            delta = atoquat((0, 1, 0), -1)
+            delta = atoquat((0, 1, 0), 1)
             camera_rot = qmul(camera_rot, delta)
         if keys[pygame.K_LEFT]:
-            delta = atoquat((0, 1, 0), 1)
+            delta = atoquat((0, 1, 0), -1)
+            camera_rot = qmul(camera_rot, delta)
+        if keys[pygame.K_UP]:
+            delta = atoquat((1, 0, 0), 1)
+            camera_rot = qmul(camera_rot, delta)
+        if keys[pygame.K_DOWN]:
+            delta = atoquat((1, 0, 0), -1)
             camera_rot = qmul(camera_rot, delta)
 
         print(camera_rot)
@@ -57,7 +75,7 @@ def main():
                 y += obj.pos[1]
                 z += obj.pos[2]
 
-                x, y, z = qrotate(camera_rot, (x, y, z))
+                x, y, z = qrotate(qconj(camera_rot), (x, y, z))
 
                 if z <= 0:
                     continue
