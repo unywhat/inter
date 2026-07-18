@@ -152,13 +152,31 @@ def load_asset(name: str) -> list[tuple[float, float, float]]:
     """
 
     extracted_points: list[tuple[float, float, float]] = []
+    extracted_edges: list[tuple[int, int]] = []
 
     with open(f'models/{name}.inter', 'r') as obj:
-        for line in obj:
-            x, y, z = line.split()
-            extracted_points.append((float(x), float(y), float(z)))
+        section = "vertices"
 
-    return extracted_points
+        for line in obj:
+            sp_line = line.split()
+            if not sp_line:
+                section = "edges"
+                continue
+
+            if section == "vertices":
+                x, y, z = sp_line
+                extracted_points.append((float(x), float(y), float(z)))
+
+            elif section == "edges":
+                edge = line.strip().split("-")
+                extracted_edges.append((int(edge[0]), int(edge[1])))
+
+    resolved_edges = [
+        (extracted_points[a], extracted_points[b])
+        for a, b in extracted_edges
+    ]
+
+    return (extracted_points, resolved_edges)
 
 def convert_obj_to_inter(name: str):
     """Converts OBJ files to .inter.
