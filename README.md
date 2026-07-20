@@ -14,6 +14,8 @@ inter is in VERY early development, expect a multitude of bugs to occur and a la
 - basic 3D vertex projection & rendering
 - WASD camera movement
 - asset loading (.obj or similar)
+- simple gravity physics script
+- relatively easy object handler
 
 ### requirements
 - Python 3.11+
